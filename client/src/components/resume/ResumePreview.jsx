@@ -1,9 +1,10 @@
+import React from 'react';
 import { useResumeStore } from '../../store/resumeStore';
 import ModernTemplate from '../templates/ModernTemplate';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
 
-const ResumePreview = ({ data, targetRef }) => {
+const ResumePreview = React.memo(({ data, targetRef }) => {
   const { selectedTemplate } = useResumeStore();
 
   if (!data) return <div className="p-8 text-center text-gray-500">Loading preview...</div>;
@@ -30,6 +31,6 @@ const ResumePreview = ({ data, targetRef }) => {
       </div>
     </div>
   );
-};
+});
 
 export default ResumePreview;

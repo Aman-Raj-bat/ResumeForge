@@ -1,9 +1,18 @@
-import { Link } from 'react-router-dom';
-import { useAppStore } from '../../store';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/authStore';
+import { useToast } from '../ui/Toast';
 import { LogOut } from 'lucide-react';
 
 const Navbar = () => {
-  const { isAuthenticated, user, logout } = useAppStore();
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuthStore();
+  const { toast } = useToast();
+
+  const handleLogout = () => {
+    logout();
+    toast.info('You have been logged out.');
+    navigate('/login');
+  };
 
   return (
     <nav className="border-b border-border-main bg-surface px-6 py-4 flex items-center justify-between sticky top-0 z-50">

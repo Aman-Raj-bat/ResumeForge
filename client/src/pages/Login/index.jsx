@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
-import api from '../../services/api';
-import { useAppStore } from '../../store';
+import { useAuthStore } from '../../store/authStore';
+import { useToast } from '../../components/ui/Toast';
+import PageTransition from '../../components/animations/PageTransition';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const { login } = useAuthStore();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { setAuth, setLoading, isLoading } = useAppStore();
 
   const {
     register,
@@ -19,46 +21,31 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      setServerError('');
-      setLoading(true);
-      
-      const response = await api.post('/auth/login', data);
-      
-      if (response.data.success) {
-        const { user, token } = response.data.data;
-        setAuth(user, token);
-        navigate('/');
-      }
-    } catch (error) {
-      if (error.response?.data?.message) {
-        setServerError(error.response.data.message);
-      } else {
-        setServerError('Something went wrong. Please try again.');
-      }
+      setIsLoading(true);
+      await login(data.email, data.password);
+      toast.success('Welcome back to ResumeForge!');
+      navigate('/dashboard');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to login. Please check your credentials.');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center bg-background py-12 px-4 sm:px-6 lg:px-8">
+    <PageTransition className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-surface rounded-xl shadow-sm border border-border-main p-8">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h2>
           <p className="text-gray-500 text-sm">Please sign in to your account</p>
         </div>
 
-        {serverError && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded-md text-sm text-center">
-            {serverError}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
             <input
               type="email"
+              aria-invalid={errors.email ? "true" : "false"}
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
                 errors.email ? 'border-red-500' : 'border-border-main'
               }`}
@@ -79,6 +66,7 @@ const Login = () => {
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
+                aria-invalid={errors.password ? "true" : "false"}
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
                   errors.password ? 'border-red-500' : 'border-border-main'
                 }`}
@@ -89,8 +77,9 @@ const Login = () => {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-md"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -101,7 +90,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center items-center bg-primary text-white py-2.5 px-4 rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full flex justify-center items-center bg-primary text-white py-2.5 px-4 rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
           >
             {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Sign In'}
           </button>
@@ -109,12 +98,12 @@ const Login = () => {
 
         <div className="mt-6 text-center text-sm">
           <span className="text-gray-500">Don't have an account? </span>
-          <Link to="/register" className="text-primary font-medium hover:underline">
+          <Link to="/register" className="text-primary font-medium hover:underline focus:outline-none focus:underline">
             Sign up
           </Link>
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAppStore } from '../store';
+import { useAuthStore } from '../store/authStore';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api', // Adjusted to match server routing /api/auth
@@ -12,7 +12,7 @@ const api = axios.create({
 // Request interceptor to add the auth token header to requests
 api.interceptors.request.use(
   (config) => {
-    const token = useAppStore.getState().token;
+    const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,7 +27,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       // Clear auth state on unauthorized access
-      useAppStore.getState().logout();
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }

@@ -1,38 +1,57 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MainLayout from './layouts/MainLayout';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { useAuthStore } from './store/authStore';
+import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import NotFound from './pages/NotFound';
 import Dashboard from './pages/Dashboard';
 import ResumeEditor from './pages/ResumeEditor';
-import PublicRoute from './routes/PublicRoute';
-import ProtectedRoute from './routes/ProtectedRoute';
+import { ToastProvider } from './components/ui/ToastProvider';
 
-function App() {
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  const { isAuthenticated } = useAuthStore();
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          
-          {/* Public Routes */}
-          <Route element={<PublicRoute />}>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </Route>
-
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-             <Route path="dashboard" element={<Dashboard />} />
-             <Route path="resume/:id" element={<ResumeEditor />} />
-          </Route>
-
-          <Route path="*" element={<NotFound />} />
-        </Route>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<Home />} />
+        <Route 
+          path="/login" 
+          element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} 
+        />
+        <Route 
+          path="/register" 
+          element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} 
+        />
+        <Route 
+          path="/dashboard" 
+          element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/editor/:id" 
+          element={isAuthenticated ? <ResumeEditor /> : <Navigate to="/login" />} 
+        />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </Router>
+    </AnimatePresence>
   );
-}
+};
+
+const App = () => {
+  return (
+    <ToastProvider>
+      <Router>
+        <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+          <Navbar />
+          <main className="flex-grow flex flex-col">
+            <AnimatedRoutes />
+          </main>
+        </div>
+      </Router>
+    </ToastProvider>
+  );
+};
 
 export default App;
