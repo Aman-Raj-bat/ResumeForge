@@ -5,6 +5,8 @@ import { useResumeStore } from '../../store/resumeStore';
 import api from '../../services/api';
 import ResumeForm from '../../components/resume/ResumeForm';
 import ResumePreview from '../../components/resume/ResumePreview';
+import TemplateSelector from '../../components/preview/TemplateSelector';
+import PdfExportButton from '../../components/pdf/PdfExportButton';
 import { Loader2, ArrowLeft, AlertCircle, Check } from 'lucide-react';
 
 const ResumeEditor = () => {
@@ -31,6 +33,7 @@ const ResumeEditor = () => {
   const debounceTimer = useRef(null);
   const isFirstRender = useRef(true);
   const lastSavedData = useRef(null);
+  const printRef = useRef(null);
 
   // Deep equality check for "Only save when changes exist"
   const hasChanges = (current, lastSaved) => {
@@ -142,19 +145,16 @@ const ResumeEditor = () => {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-xl font-bold text-gray-900 truncate max-w-sm">
+          <h1 className="text-xl font-bold text-gray-900 truncate max-w-[200px] lg:max-w-sm">
             {formData.title || 'Untitled Resume'}
           </h1>
+          <div className="hidden md:block border-l border-gray-300 h-6 mx-2"></div>
+          {renderSaveStatus()}
         </div>
         
-        <div className="flex items-center gap-4">
-          {renderSaveStatus()}
-          <button 
-            onClick={() => navigate('/dashboard')}
-            className="bg-primary text-white px-5 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity"
-          >
-            Done
-          </button>
+        <div className="flex items-center gap-6">
+          <TemplateSelector />
+          <PdfExportButton targetRef={printRef} filename={formData.title || 'resume'} />
         </div>
       </header>
 
@@ -167,7 +167,7 @@ const ResumeEditor = () => {
         
         {/* Right Panel: Live Preview */}
         <div className="w-1/2 h-full">
-          <ResumePreview data={formData} />
+          <ResumePreview data={formData} targetRef={printRef} />
         </div>
       </div>
     </div>

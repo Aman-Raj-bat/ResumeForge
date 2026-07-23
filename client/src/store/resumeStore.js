@@ -4,10 +4,12 @@ export const useResumeStore = create((set) => ({
   resumes: [],
   activeResumeId: null,
   saveStatus: 'saved', // 'saved', 'saving', 'error'
+  selectedTemplate: 'modern',
 
   setResumes: (resumes) => set({ resumes }),
   setActiveResumeId: (id) => set({ activeResumeId: id }),
   setSaveStatus: (status) => set({ saveStatus: status }),
+  setSelectedTemplate: (template) => set({ selectedTemplate: template }),
   
   updateResumeInList: (updatedResume) => set((state) => ({
     resumes: state.resumes.map((r) => r._id === updatedResume._id ? updatedResume : r)
