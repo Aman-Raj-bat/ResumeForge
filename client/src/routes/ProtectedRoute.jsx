@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
 
   // Temporary redirect for Phase 2: Redirect authenticated users accessing protected dashboard routes back to Home.
   // In Phase 3, we will render <Outlet /> here.
-  return <Navigate to="/" replace />; 
+  return <Outlet />; 
 };
 
 export default ProtectedRoute;

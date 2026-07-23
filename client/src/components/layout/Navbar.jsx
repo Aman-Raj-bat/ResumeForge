@@ -12,9 +12,15 @@ const Navbar = () => {
           ResumeForge
         </Link>
         <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          <a href="/#features" className="hover:text-primary transition-colors">Features</a>
-          <a href="/#templates" className="hover:text-primary transition-colors">Templates</a>
+          {!isAuthenticated ? (
+            <>
+              <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+              <a href="/#features" className="hover:text-primary transition-colors">Features</a>
+              <a href="/#templates" className="hover:text-primary transition-colors">Templates</a>
+            </>
+          ) : (
+            <Link to="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
+          )}
         </div>
       </div>
       <div className="flex items-center gap-4">

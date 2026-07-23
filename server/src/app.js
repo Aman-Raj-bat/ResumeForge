@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth.routes');
+const resumeRoutes = require('./routes/resume.routes');
 const { errorHandler, notFoundHandler } = require('./middlewares/error.middleware');
 
 const app = express();
@@ -26,8 +27,9 @@ app.get('/', (req, res) => {
   res.send('ResumeForge API is running!');
 });
 
-// Authentication Routes
+// API Routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/resumes', resumeRoutes);
 
 // 404 Handler
 app.use(notFoundHandler);
