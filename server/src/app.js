@@ -7,18 +7,28 @@ const authRoutes = require('./routes/auth.routes');
 const resumeRoutes = require('./routes/resume.routes');
 const aiRoutes = require('./routes/ai.routes');
 const { errorHandler, notFoundHandler } = require('./middlewares/error.middleware');
+const logger = require('./utils/logger');
 
 const app = express();
 
 // Global Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan('dev'));
+
+const allowedOrigins = process.env.CLIENT_URL ? process.env.CLIENT_URL.split(',') : ['http://localhost:5173'];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   })
 );

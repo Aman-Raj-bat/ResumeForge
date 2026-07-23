@@ -1,13 +1,25 @@
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { useAuthStore } from './store/authStore';
 import Navbar from './components/layout/Navbar';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Dashboard from './pages/Dashboard';
-import ResumeEditor from './pages/ResumeEditor';
 import { ToastProvider } from './components/ui/ToastProvider';
+import ErrorBoundary from './components/errors/ErrorBoundary';
+import NotFound from './components/errors/NotFound';
+import { Loader2 } from 'lucide-react';
+
+// Lazy loaded pages
+const Home = React.lazy(() => import('./pages/Home'));
+const Login = React.lazy(() => import('./pages/Login'));
+const Register = React.lazy(() => import('./pages/Register'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const ResumeEditor = React.lazy(() => import('./pages/ResumeEditor'));
+
+const SuspenseFallback = () => (
+  <div className="flex-grow flex items-center justify-center min-h-[50vh]">
+    <Loader2 size={40} className="animate-spin text-primary" />
+  </div>
+);
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -33,7 +45,7 @@ const AnimatedRoutes = () => {
           path="/editor/:id" 
           element={isAuthenticated ? <ResumeEditor /> : <Navigate to="/login" />} 
         />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );
@@ -41,16 +53,20 @@ const AnimatedRoutes = () => {
 
 const App = () => {
   return (
-    <ToastProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-          <Navbar />
-          <main className="flex-grow flex flex-col">
-            <AnimatedRoutes />
-          </main>
-        </div>
-      </Router>
-    </ToastProvider>
+    <ErrorBoundary>
+      <ToastProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
+            <Navbar />
+            <main className="flex-grow flex flex-col">
+              <Suspense fallback={<SuspenseFallback />}>
+                <AnimatedRoutes />
+              </Suspense>
+            </main>
+          </div>
+        </Router>
+      </ToastProvider>
+    </ErrorBoundary>
   );
 };
 

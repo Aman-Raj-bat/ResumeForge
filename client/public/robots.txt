@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Do not index authenticated routes
+Disallow: /editor/
+Disallow: /dashboard/
+
+Sitemap: https://resumeforge.app/sitemap.xml
