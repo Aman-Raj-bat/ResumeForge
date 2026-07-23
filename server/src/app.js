@@ -3,6 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const authRoutes = require('./routes/auth.routes');
+const { errorHandler, notFoundHandler } = require('./middlewares/error.middleware');
 
 const app = express();
 
@@ -24,18 +26,13 @@ app.get('/', (req, res) => {
   res.send('ResumeForge API is running!');
 });
 
-// Example route placeholder
-// app.use('/api/v1/auth', authRoutes);
+// Authentication Routes
+app.use('/api/v1/auth', authRoutes);
 
 // 404 Handler
-app.use((req, res, next) => {
-  res.status(404).json({ message: 'API route not found' });
-});
+app.use(notFoundHandler);
 
 // Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error', error: err.message });
-});
+app.use(errorHandler);
 
 module.exports = app;
