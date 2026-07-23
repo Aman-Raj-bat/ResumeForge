@@ -15,7 +15,7 @@ const ResumeEditor = () => {
   const { setActiveResumeId, saveStatus, setSaveStatus, updateResumeInList } = useResumeStore();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   
-  const { register, control, watch, reset, formState: { errors, isDirty } } = useForm({
+  const { register, control, watch, reset, getValues, setValue, formState: { errors, isDirty } } = useForm({
     defaultValues: {
       title: 'Untitled Resume',
       personalInfo: {},
@@ -162,7 +162,7 @@ const ResumeEditor = () => {
       <div className="flex-grow flex overflow-hidden">
         {/* Left Panel: Form */}
         <div className="w-1/2 h-full border-r border-border-main">
-          <ResumeForm register={register} control={control} errors={errors} />
+          <ResumeForm register={register} control={control} errors={errors} getValues={getValues} setValue={setValue} />
         </div>
         
         {/* Right Panel: Live Preview */}

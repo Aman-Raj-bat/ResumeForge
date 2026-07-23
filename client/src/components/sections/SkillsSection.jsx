@@ -1,15 +1,40 @@
 import { useFieldArray } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import AiActionButton from '../ai/AiActionButton';
+import AiModal from '../ai/AiModal';
+import { aiService } from '../../services/ai';
 
-const SkillsSection = ({ control, register }) => {
+const SkillsSection = ({ control, register, getValues, setValue }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'skills',
   });
 
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+
+  const handleGenerateSkills = async () => {
+    const resumeData = getValues();
+    const result = await aiService.suggestSkills(resumeData);
+    return result.data.result;
+  };
+
+  const handleAcceptSkills = (text) => {
+    // text should be a comma-separated list. We parse it and append to the form.
+    const newSkills = text.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    newSkills.forEach(skillName => {
+      append({ name: skillName });
+    });
+    // Mark form as dirty so it auto-saves immediately
+    setValue('skills', getValues('skills'), { shouldDirty: true });
+  };
+
   return (
     <div className="bg-surface p-6 rounded-lg border border-border-main mb-6 shadow-sm">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Skills</h3>
+      <div className="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
+        <AiActionButton onClick={() => setIsAiModalOpen(true)} label="Suggest Skills" />
+      </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
         {fields.map((field, index) => (
@@ -38,6 +63,14 @@ const SkillsSection = ({ control, register }) => {
       >
         <Plus size={16} /> Add Skill
       </button>
+
+      <AiModal 
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        title="Suggest Missing Skills"
+        generateData={handleGenerateSkills}
+        onAccept={handleAcceptSkills}
+      />
     </div>
   );
 };

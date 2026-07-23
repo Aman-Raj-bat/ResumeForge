@@ -1,11 +1,45 @@
 import { useFieldArray } from 'react-hook-form';
 import { Plus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import AiActionButton from '../ai/AiActionButton';
+import AiModal from '../ai/AiModal';
+import { aiService } from '../../services/ai';
 
-const ExperienceSection = ({ control, register }) => {
+const ExperienceSection = ({ control, register, getValues, setValue }) => {
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'experience',
   });
+
+  const [aiModalConfig, setAiModalConfig] = useState({ isOpen: false, type: null, index: null });
+
+  const handleAiAction = (type, index) => {
+    setAiModalConfig({ isOpen: true, type, index });
+  };
+
+  const closeAiModal = () => {
+    setAiModalConfig({ isOpen: false, type: null, index: null });
+  };
+
+  const generateData = async () => {
+    const { type, index } = aiModalConfig;
+    const currentValues = getValues();
+    const expData = currentValues.experience[index];
+
+    if (type === 'rewrite') {
+      const res = await aiService.rewriteExperience(expData);
+      return res.data.result;
+    } else if (type === 'bullets') {
+      const res = await aiService.generateBullets(expData.position, expData.company);
+      return res.data.result;
+    }
+    return '';
+  };
+
+  const handleAccept = (text) => {
+    const { index } = aiModalConfig;
+    setValue(`experience.${index}.description`, text, { shouldDirty: true });
+  };
 
   return (
     <div className="bg-surface p-6 rounded-lg border border-border-main mb-6 shadow-sm">
@@ -67,10 +101,16 @@ const ExperienceSection = ({ control, register }) => {
               </div>
             </div>
             <div className="col-span-1 md:col-span-2">
-              <label className="block text-sm text-gray-600 mb-1">Description (Bullet points)</label>
+              <div className="flex justify-between items-end mb-1">
+                <label className="block text-sm text-gray-600">Description</label>
+                <div className="flex gap-2">
+                  <AiActionButton onClick={() => handleAiAction('bullets', index)} label="Bullets" />
+                  <AiActionButton onClick={() => handleAiAction('rewrite', index)} label="Rewrite" />
+                </div>
+              </div>
               <textarea 
-                rows="4"
-                className="w-full px-3 py-2 border border-border-main rounded-md focus:ring-1 focus:ring-primary focus:outline-none resize-y"
+                rows="5"
+                className="w-full px-3 py-2 border border-border-main rounded-md focus:ring-1 focus:ring-primary focus:outline-none resize-y mt-2"
                 placeholder="- Developed a new feature..."
                 {...register(`experience.${index}.description`)} 
               />
@@ -86,6 +126,14 @@ const ExperienceSection = ({ control, register }) => {
       >
         <Plus size={16} /> Add Experience
       </button>
+
+      <AiModal 
+        isOpen={aiModalConfig.isOpen}
+        onClose={closeAiModal}
+        title={aiModalConfig.type === 'rewrite' ? 'Rewrite Experience' : 'Generate Bullets'}
+        generateData={generateData}
+        onAccept={handleAccept}
+      />
     </div>
   );
 };

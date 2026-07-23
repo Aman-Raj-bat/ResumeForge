@@ -7,7 +7,7 @@ import SkillsSection from '../sections/SkillsSection';
 import CertificationsSection from '../sections/CertificationsSection';
 import LanguagesSection from '../sections/LanguagesSection';
 
-const ResumeForm = ({ register, control, errors }) => {
+const ResumeForm = ({ register, control, errors, getValues, setValue }) => {
   return (
     <div className="p-6 h-full overflow-y-auto bg-gray-50">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -22,11 +22,11 @@ const ResumeForm = ({ register, control, errors }) => {
         </div>
         
         <PersonalInfoSection register={register} errors={errors} />
-        <SummarySection register={register} />
-        <ExperienceSection control={control} register={register} />
+        <SummarySection register={register} getValues={getValues} setValue={setValue} />
+        <ExperienceSection control={control} register={register} getValues={getValues} setValue={setValue} />
         <EducationSection control={control} register={register} />
         <ProjectsSection control={control} register={register} />
-        <SkillsSection control={control} register={register} />
+        <SkillsSection control={control} register={register} getValues={getValues} setValue={setValue} />
         <CertificationsSection control={control} register={register} />
         <LanguagesSection control={control} register={register} />
         
