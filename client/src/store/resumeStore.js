@@ -2,13 +2,11 @@ import { create } from 'zustand';
 
 export const useResumeStore = create((set) => ({
   resumes: [],
-  currentResume: null,
-  isLoading: false,
+  activeResumeId: null,
   saveStatus: 'saved', // 'saved', 'saving', 'error'
 
   setResumes: (resumes) => set({ resumes }),
-  setCurrentResume: (resume) => set({ currentResume: resume }),
-  setLoading: (isLoading) => set({ isLoading }),
+  setActiveResumeId: (id) => set({ activeResumeId: id }),
   setSaveStatus: (status) => set({ saveStatus: status }),
   
   updateResumeInList: (updatedResume) => set((state) => ({

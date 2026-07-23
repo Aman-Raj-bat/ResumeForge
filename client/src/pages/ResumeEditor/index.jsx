@@ -5,15 +5,15 @@ import { useResumeStore } from '../../store/resumeStore';
 import api from '../../services/api';
 import ResumeForm from '../../components/resume/ResumeForm';
 import ResumePreview from '../../components/resume/ResumePreview';
-import { Loader2, ArrowLeft, Save, AlertCircle, Check } from 'lucide-react';
+import { Loader2, ArrowLeft, AlertCircle, Check } from 'lucide-react';
 
 const ResumeEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentResume, setCurrentResume, saveStatus, setSaveStatus } = useResumeStore();
+  const { setActiveResumeId, saveStatus, setSaveStatus, updateResumeInList } = useResumeStore();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   
-  const { register, control, watch, reset, formState: { errors } } = useForm({
+  const { register, control, watch, reset, formState: { errors, isDirty } } = useForm({
     defaultValues: {
       title: 'Untitled Resume',
       personalInfo: {},
@@ -30,6 +30,13 @@ const ResumeEditor = () => {
   const formData = watch();
   const debounceTimer = useRef(null);
   const isFirstRender = useRef(true);
+  const lastSavedData = useRef(null);
+
+  // Deep equality check for "Only save when changes exist"
+  const hasChanges = (current, lastSaved) => {
+    if (!lastSaved) return true;
+    return JSON.stringify(current) !== JSON.stringify(lastSaved);
+  };
 
   // Fetch resume data on mount
   useEffect(() => {
@@ -39,7 +46,8 @@ const ResumeEditor = () => {
         const res = await api.get(`/resumes/${id}`);
         if (res.data.success) {
           const fetchedResume = res.data.data;
-          setCurrentResume(fetchedResume);
+          setActiveResumeId(fetchedResume._id);
+          lastSavedData.current = fetchedResume;
           reset(fetchedResume); // populate form with fetched data
         }
       } catch (error) {
@@ -52,10 +60,10 @@ const ResumeEditor = () => {
     
     if (id) fetchResume();
     
-    return () => setCurrentResume(null); // cleanup on unmount
-  }, [id, navigate, setCurrentResume, reset]);
+    return () => setActiveResumeId(null); // cleanup on unmount
+  }, [id, navigate, setActiveResumeId, reset]);
 
-  // Auto-save logic
+  // Auto-save logic with exactly ~1000ms debounce
   useEffect(() => {
     if (isInitialLoading) return;
     
@@ -65,12 +73,22 @@ const ResumeEditor = () => {
       return;
     }
 
+    // Only save when changes actually exist
+    if (!hasChanges(formData, lastSavedData.current)) {
+      return;
+    }
+
     const saveChanges = async () => {
       try {
         setSaveStatus('saving');
-        await api.put(`/resumes/${id}`, formData);
+        const res = await api.put(`/resumes/${id}`, formData);
         setSaveStatus('saved');
-        setCurrentResume({ ...currentResume, ...formData });
+        lastSavedData.current = formData;
+        
+        // Optionally update the list if needed, though mostly relevant for Dashboard
+        if (res.data.success) {
+          updateResumeInList(res.data.data);
+        }
       } catch (error) {
         console.error('Failed to save resume:', error);
         setSaveStatus('error');
@@ -82,15 +100,15 @@ const ResumeEditor = () => {
       clearTimeout(debounceTimer.current);
     }
 
-    // Set new debounce timer
+    // Set new debounce timer to 1000ms
     debounceTimer.current = setTimeout(() => {
       saveChanges();
-    }, 1500);
+    }, 1000);
 
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  }, [formData, id, isInitialLoading, setCurrentResume, setSaveStatus]);
+  }, [formData, id, isInitialLoading, setSaveStatus, updateResumeInList]);
 
   if (isInitialLoading) {
     return (
