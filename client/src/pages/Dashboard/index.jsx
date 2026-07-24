@@ -25,11 +25,11 @@ const Dashboard = () => {
     try {
       setIsLoading(true);
       const res = await api.get('/resumes');
-      if (res.data.success) {
+      if (res?.data?.success) {
         setResumes(res.data.data);
       }
     } catch (error) {
-      toast.error('Failed to fetch resumes.');
+      toast.error(error.message || 'Failed to fetch resumes.');
       console.error('Error fetching resumes:', error);
     } finally {
       setIsLoading(false);
@@ -39,12 +39,12 @@ const Dashboard = () => {
   const handleCreateResume = async () => {
     try {
       const res = await api.post('/resumes', { title: 'Untitled Resume' });
-      if (res.data.success) {
+      if (res?.data?.success) {
         toast.success('Resume created successfully!');
         navigate(`/editor/${res.data.data._id}`);
       }
     } catch (error) {
-      toast.error('Failed to create resume.');
+      toast.error(error.message || 'Failed to create resume.');
       console.error('Error creating resume:', error);
     }
   };
@@ -52,12 +52,12 @@ const Dashboard = () => {
   const handleDeleteResume = async (id) => {
     try {
       const res = await api.delete(`/resumes/${id}`);
-      if (res.data.success) {
+      if (res?.data?.success) {
         removeResumeFromList(id);
         toast.success('Resume deleted successfully.');
       }
     } catch (error) {
-      toast.error('Failed to delete resume.');
+      toast.error(error.message || 'Failed to delete resume.');
       console.error('Error deleting resume:', error);
     }
   };

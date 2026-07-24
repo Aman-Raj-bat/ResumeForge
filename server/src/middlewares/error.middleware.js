@@ -9,10 +9,10 @@ const errorHandler = (err, req, res, next) => {
   
   const responsePayload = {
     success: false,
-    message: process.env.NODE_ENV === 'production' && statusCode === 500 
+    message: process.env.NODE_ENV !== 'development' && statusCode === 500 
       ? 'Internal Server Error' 
       : message,
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   };
   
   return res.status(statusCode).json(responsePayload);

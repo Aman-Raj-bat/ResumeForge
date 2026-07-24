@@ -29,7 +29,7 @@ const Register = () => {
       toast.success('Account created successfully!');
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to create account.');
+      toast.error(err.message || 'Failed to create account.');
     } finally {
       setIsLoading(false);
     }

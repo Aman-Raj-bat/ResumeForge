@@ -26,7 +26,7 @@ const Login = () => {
       toast.success('Welcome back to ResumeForge!');
       navigate('/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+      toast.error(err.message || 'Failed to login. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }

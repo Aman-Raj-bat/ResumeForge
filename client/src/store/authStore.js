@@ -11,7 +11,7 @@ export const useAuthStore = create(
 
       login: async (email, password) => {
         const response = await api.post('/auth/login', { email, password });
-        if (response.data.success) {
+        if (response?.data?.success) {
           const { user, token } = response.data.data;
           set({ user, token, isAuthenticated: true });
           return user;
@@ -20,7 +20,7 @@ export const useAuthStore = create(
 
       register: async (name, email, password) => {
         const response = await api.post('/auth/register', { name, email, password });
-        if (response.data.success) {
+        if (response?.data?.success) {
           const { user, token } = response.data.data;
           set({ user, token, isAuthenticated: true });
           return user;

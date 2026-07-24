@@ -47,7 +47,7 @@ const ResumeEditor = () => {
       try {
         setIsInitialLoading(true);
         const res = await api.get(`/resumes/${id}`);
-        if (res.data.success) {
+        if (res?.data?.success) {
           const fetchedResume = res.data.data;
           setActiveResumeId(fetchedResume._id);
           lastSavedData.current = fetchedResume;
@@ -89,7 +89,7 @@ const ResumeEditor = () => {
         lastSavedData.current = formData;
         
         // Optionally update the list if needed, though mostly relevant for Dashboard
-        if (res.data.success) {
+        if (res?.data?.success) {
           updateResumeInList(res.data.data);
         }
       } catch (error) {

@@ -21,16 +21,39 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token expiration/unauthorized errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      // Clear auth state on unauthorized access
+    // 1. Extract status if available
+    const status = error.response ? error.response.status : null;
+
+    // 2. Handle unauthorized
+    if (status === 401) {
       useAuthStore.getState().logout();
       window.location.href = '/login';
     }
-    return Promise.reject(error);
+
+    // 3. Normalize the error object for safe consumption in components
+    const customError = new Error(error.message);
+    customError.status = status;
+    customError.data = error.response?.data || null;
+
+    // Build a user-friendly message based on the type of failure
+    if (!error.response) {
+      // Network error, timeout, or CORS failure (no response from server)
+      customError.message = 'Network error. Please check your connection and try again.';
+    } else if (status >= 500) {
+      // Server error
+      customError.message = 'An unexpected server error occurred. Please try again later.';
+    } else {
+      // Client error (4xx) - prefer backend message
+      customError.message = error.response?.data?.message || error.message || 'An error occurred';
+    }
+
+    // Include detailed validation errors if the backend provides them
+    customError.details = error.response?.data?.errors;
+
+    return Promise.reject(customError);
   }
 );
 

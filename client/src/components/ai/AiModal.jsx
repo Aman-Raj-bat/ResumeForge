@@ -20,7 +20,7 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
       const generatedText = await generateData();
       setResult(generatedText);
     } catch (err) {
-      setError(err?.response?.data?.message || err.message || 'Failed to generate AI response');
+      setError(err.message || 'Failed to generate AI response');
     } finally {
       setIsLoading(false);
     }
