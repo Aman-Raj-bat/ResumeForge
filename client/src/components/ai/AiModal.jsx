@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { X, Check, RefreshCw, Copy, AlertCircle } from 'lucide-react';
+import { X, Check, RefreshCw, Copy, AlertCircle, Sparkles } from 'lucide-react';
 import AiLoading from './AiLoading';
+import PageTransition from '../animations/PageTransition';
 
 const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistant' }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -41,38 +42,41 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6 lg:p-8 animate-in fade-in duration-200">
+      <div className="bg-surface rounded-2xl shadow-elevated w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] border border-border-main ring-1 ring-black/5 animate-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50 shrink-0">
-          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-            ✨ {title}
+        <div className="px-6 py-5 flex items-center justify-between shrink-0">
+          <h2 className="text-sm font-bold text-text-main flex items-center gap-2 tracking-tight uppercase">
+            <Sparkles size={16} className="text-primary" />
+            {title}
           </h2>
           <button 
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-text-muted hover:text-text-main p-1.5 rounded-md hover:bg-gray-100 transition-colors"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto grow">
+        <div className="p-6 overflow-y-auto grow bg-gray-50/50">
           {isLoading ? (
-            <AiLoading />
+            <div className="py-8">
+              <AiLoading />
+            </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
                 <AlertCircle size={24} className="text-red-500" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900">Oops! Something went wrong</h3>
-              <p className="text-sm text-gray-500 mt-1 max-w-md">{error}</p>
+              <h3 className="text-base font-bold text-text-main tracking-tight">Generation failed</h3>
+              <p className="text-sm text-text-muted mt-1.5 max-w-md">{error}</p>
             </div>
           ) : result ? (
             <div className="space-y-4">
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-gray-800 whitespace-pre-wrap leading-relaxed text-sm">
+              <div className="p-5 bg-white rounded-xl border border-border-main shadow-subtle">
+                <p className="text-text-main whitespace-pre-wrap leading-relaxed text-sm">
                   {result}
                 </p>
               </div>
@@ -82,21 +86,21 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
 
         {/* Footer */}
         {!isLoading && (result || error) && (
-          <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between shrink-0">
+          <div className="px-6 py-5 flex items-center justify-between shrink-0 bg-surface border-t border-border-main">
             <div className="flex items-center gap-2">
               <button
                 onClick={handleGenerate}
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-text-main bg-white border border-border-main rounded-md hover:bg-gray-50 transition-colors shadow-sm"
               >
-                <RefreshCw size={16} />
+                <RefreshCw size={14} />
                 Regenerate
               </button>
               {result && (
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-text-main bg-white border border-border-main rounded-md hover:bg-gray-50 transition-colors shadow-sm"
                 >
-                  <Copy size={16} />
+                  <Copy size={14} />
                   Copy
                 </button>
               )}
@@ -105,7 +109,7 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
             <div className="flex items-center gap-3">
               <button
                 onClick={handleClose}
-                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-xs font-semibold text-text-muted hover:text-text-main transition-colors"
               >
                 Cancel
               </button>
@@ -115,10 +119,10 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
                     onAccept(result);
                     handleClose();
                   }}
-                  className="flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-white bg-primary rounded-md hover:opacity-90 transition-opacity"
+                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-white bg-primary rounded-md hover:bg-primary/90 transition-all shadow-subtle hover:shadow-elevated"
                 >
-                  <Check size={16} />
-                  Apply
+                  <Check size={14} />
+                  Apply Text
                 </button>
               )}
             </div>

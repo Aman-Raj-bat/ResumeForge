@@ -8,10 +8,10 @@ const LanguagesSection = ({ control, register }) => {
   });
 
   return (
-    <div className="bg-surface p-6 rounded-lg border border-border-main mb-6 shadow-sm">
-      <h3 className="text-xl font-semibold mb-4 text-gray-800 border-b pb-2">Languages</h3>
+    <div className="bg-surface rounded-xl p-5 md:p-7 border border-border-main shadow-subtle group hover:border-gray-300 transition-colors">
+      <h3 className="text-xs font-semibold text-text-muted mb-5 uppercase tracking-wider">Languages</h3>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
         {fields.map((field, index) => (
           <div key={field.id} className="relative flex items-center gap-2">
             <input 
@@ -40,7 +40,7 @@ const LanguagesSection = ({ control, register }) => {
       <button
         type="button"
         onClick={() => append({ name: '', proficiency: '' })}
-        className="mt-4 flex items-center gap-2 text-primary text-sm font-medium hover:underline"
+        className="mt-4 flex items-center gap-1.5 text-text-muted text-xs font-medium hover:text-text-main transition-colors bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200 hover:border-gray-300"
       >
         <Plus size={16} /> Add Language
       </button>

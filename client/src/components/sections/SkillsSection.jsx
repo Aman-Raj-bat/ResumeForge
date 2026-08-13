@@ -30,7 +30,7 @@ const SkillsSection = ({ control, register, getValues, setValue }) => {
   };
 
   return (
-    <div className="bg-surface p-6 rounded-lg border border-border-main mb-6 shadow-sm">
+    <div className="bg-surface rounded-xl p-5 md:p-7 border border-border-main shadow-subtle group hover:border-gray-300 transition-colors">
       <div className="flex justify-between items-center mb-4 border-b pb-2">
         <h3 className="text-xl font-semibold text-gray-800">Skills</h3>
         <AiActionButton onClick={() => setIsAiModalOpen(true)} label="Suggest Skills" />
@@ -59,7 +59,7 @@ const SkillsSection = ({ control, register, getValues, setValue }) => {
       <button
         type="button"
         onClick={() => append({ name: '' })}
-        className="mt-4 flex items-center gap-2 text-primary text-sm font-medium hover:underline"
+        className="mt-4 flex items-center gap-1.5 text-text-muted text-xs font-medium hover:text-text-main transition-colors bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200 hover:border-gray-300"
       >
         <Plus size={16} /> Add Skill
       </button>

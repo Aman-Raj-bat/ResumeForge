@@ -7,15 +7,17 @@ import ResumeForm from '../../components/resume/ResumeForm';
 import ResumePreview from '../../components/resume/ResumePreview';
 import TemplateSelector from '../../components/preview/TemplateSelector';
 import PdfExportButton from '../../components/pdf/PdfExportButton';
-import { Loader2, ArrowLeft, AlertCircle, Check } from 'lucide-react';
+import { Loader2, ArrowLeft, AlertCircle, CheckCircle2, ChevronLeft } from 'lucide-react';
+import AiModal from '../../components/ai/AiModal';
 
 const ResumeEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { setActiveResumeId, saveStatus, setSaveStatus, updateResumeInList } = useResumeStore();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false); // For mobile toggle
   
-  const { register, control, watch, reset, getValues, setValue, formState: { errors, isDirty } } = useForm({
+  const { register, control, watch, reset, getValues, setValue, formState: { errors } } = useForm({
     defaultValues: {
       title: 'Untitled Resume',
       personalInfo: {},
@@ -35,13 +37,12 @@ const ResumeEditor = () => {
   const lastSavedData = useRef(null);
   const printRef = useRef(null);
 
-  // Deep equality check for "Only save when changes exist"
+  // Deep equality check
   const hasChanges = (current, lastSaved) => {
     if (!lastSaved) return true;
     return JSON.stringify(current) !== JSON.stringify(lastSaved);
   };
 
-  // Fetch resume data on mount
   useEffect(() => {
     const fetchResume = async () => {
       try {
@@ -51,35 +52,29 @@ const ResumeEditor = () => {
           const fetchedResume = res.data.data;
           setActiveResumeId(fetchedResume._id);
           lastSavedData.current = fetchedResume;
-          reset(fetchedResume); // populate form with fetched data
+          reset(fetchedResume);
         }
       } catch (error) {
         console.error('Failed to fetch resume:', error);
-        navigate('/dashboard'); // redirect if not found or unauthorized
+        navigate('/dashboard');
       } finally {
         setIsInitialLoading(false);
       }
     };
     
     if (id) fetchResume();
-    
-    return () => setActiveResumeId(null); // cleanup on unmount
+    return () => setActiveResumeId(null);
   }, [id, navigate, setActiveResumeId, reset]);
 
-  // Auto-save logic with exactly ~1000ms debounce
   useEffect(() => {
     if (isInitialLoading) return;
     
-    // Skip the first render effect trigger
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
 
-    // Only save when changes actually exist
-    if (!hasChanges(formData, lastSavedData.current)) {
-      return;
-    }
+    if (!hasChanges(formData, lastSavedData.current)) return;
 
     const saveChanges = async () => {
       try {
@@ -88,7 +83,6 @@ const ResumeEditor = () => {
         setSaveStatus('saved');
         lastSavedData.current = formData;
         
-        // Optionally update the list if needed, though mostly relevant for Dashboard
         if (res?.data?.success) {
           updateResumeInList(res.data.data);
         }
@@ -98,15 +92,8 @@ const ResumeEditor = () => {
       }
     };
 
-    // Clear existing timer
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-
-    // Set new debounce timer to 1000ms
-    debounceTimer.current = setTimeout(() => {
-      saveChanges();
-    }, 1000);
+    if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    debounceTimer.current = setTimeout(() => saveChanges(), 1000);
 
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -115,8 +102,9 @@ const ResumeEditor = () => {
 
   if (isInitialLoading) {
     return (
-      <div className="flex-grow flex items-center justify-center bg-background min-h-screen">
-        <Loader2 size={48} className="animate-spin text-primary" />
+      <div className="flex-grow flex flex-col items-center justify-center bg-background min-h-screen gap-4">
+        <Loader2 size={32} className="animate-spin text-primary" />
+        <p className="text-text-muted text-sm font-medium">Loading workspace...</p>
       </div>
     );
   }
@@ -124,11 +112,11 @@ const ResumeEditor = () => {
   const renderSaveStatus = () => {
     switch (saveStatus) {
       case 'saving':
-        return <span className="flex items-center gap-1 text-yellow-600 text-sm font-medium bg-yellow-50 px-3 py-1 rounded-full"><Loader2 size={14} className="animate-spin" /> Saving...</span>;
+        return <span className="flex items-center gap-1.5 text-text-muted text-xs font-medium"><Loader2 size={12} className="animate-spin" /> Saving...</span>;
       case 'saved':
-        return <span className="flex items-center gap-1 text-green-600 text-sm font-medium bg-green-50 px-3 py-1 rounded-full"><Check size={14} /> Saved</span>;
+        return <span className="flex items-center gap-1.5 text-text-muted text-xs font-medium"><CheckCircle2 size={12} /> Saved</span>;
       case 'error':
-        return <span className="flex items-center gap-1 text-red-600 text-sm font-medium bg-red-50 px-3 py-1 rounded-full"><AlertCircle size={14} /> Error saving</span>;
+        return <span className="flex items-center gap-1.5 text-red-500 text-xs font-medium"><AlertCircle size={12} /> Error saving</span>;
       default:
         return null;
     }
@@ -137,39 +125,55 @@ const ResumeEditor = () => {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
       {/* Editor Header */}
-      <header className="h-16 bg-surface border-b border-border-main flex items-center justify-between px-6 shrink-0">
-        <div className="flex items-center gap-4">
+      <header className="h-14 bg-surface border-b border-border-main flex items-center justify-between px-4 shrink-0 z-10">
+        <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate('/dashboard')}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100 text-gray-600 transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-gray-100 text-text-muted hover:text-text-main transition-colors"
+            title="Back to Dashboard"
           >
-            <ArrowLeft size={20} />
+            <ChevronLeft size={20} />
           </button>
-          <h1 className="text-xl font-bold text-gray-900 truncate max-w-[200px] lg:max-w-sm">
-            {formData.title || 'Untitled Resume'}
-          </h1>
-          <div className="hidden md:block border-l border-gray-300 h-6 mx-2"></div>
-          {renderSaveStatus()}
+          <div className="w-px h-5 bg-border-main mx-1 hidden sm:block"></div>
+          <div className="flex flex-col justify-center">
+            <h1 className="text-sm font-semibold text-text-main truncate max-w-[150px] sm:max-w-xs">
+              {formData.title || 'Untitled Resume'}
+            </h1>
+          </div>
+          <div className="ml-2">
+            {renderSaveStatus()}
+          </div>
         </div>
         
-        <div className="flex items-center gap-6">
-          <TemplateSelector />
+        <div className="flex items-center gap-3">
+          <button 
+            className="md:hidden text-sm font-medium text-text-muted px-3 py-1.5 rounded border border-border-main"
+            onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+          >
+            {isPreviewOpen ? 'Edit' : 'Preview'}
+          </button>
+          <div className="hidden sm:block">
+            <TemplateSelector />
+          </div>
           <PdfExportButton targetRef={printRef} filename={formData.title || 'resume'} />
         </div>
       </header>
 
       {/* Editor Workspace */}
-      <div className="flex-grow flex overflow-hidden">
+      <div className="flex-grow flex overflow-hidden relative">
         {/* Left Panel: Form */}
-        <div className="w-1/2 h-full border-r border-border-main">
+        <div className={`w-full md:w-[45%] lg:w-[40%] xl:w-[35%] h-full flex flex-col bg-surface border-r border-border-main z-0 transition-transform ${isPreviewOpen ? '-translate-x-full absolute md:relative md:translate-x-0' : 'translate-x-0'}`}>
           <ResumeForm register={register} control={control} errors={errors} getValues={getValues} setValue={setValue} />
         </div>
         
         {/* Right Panel: Live Preview */}
-        <div className="w-1/2 h-full">
+        <div className={`w-full md:w-[55%] lg:w-[60%] xl:w-[65%] h-full bg-[#eef2f6] flex flex-col transition-transform ${isPreviewOpen ? 'translate-x-0' : 'translate-x-full absolute md:relative md:translate-x-0'}`}>
           <ResumePreview data={formData} targetRef={printRef} />
         </div>
       </div>
+      
+      {/* Global AI Modal (will be refactored to contextual panel later) */}
+      <AiModal />
     </div>
   );
 };

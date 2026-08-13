@@ -23,16 +23,16 @@ const PdfExportButton = ({ targetRef, filename }) => {
     <button
       onClick={handleExport}
       disabled={isExporting}
-      className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+      className="flex items-center gap-2 bg-text-main text-white px-4 py-2 rounded-md text-xs font-semibold hover:bg-black transition-all shadow-subtle hover:shadow-elevated disabled:opacity-70 disabled:cursor-not-allowed"
     >
       {isExporting ? (
         <>
-          <Loader2 size={16} className="animate-spin" />
+          <Loader2 size={14} className="animate-spin" />
           Exporting...
         </>
       ) : (
         <>
-          <Download size={16} />
+          <Download size={14} />
           Export PDF
         </>
       )}

@@ -4,7 +4,7 @@ import { useResumeStore } from '../../store/resumeStore';
 import api from '../../services/api';
 import ResumeCard from '../../components/dashboard/ResumeCard';
 import EmptyState from '../../components/dashboard/EmptyState';
-import { Plus } from 'lucide-react';
+import { Plus, LayoutGrid, List } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageTransition from '../../components/animations/PageTransition';
 import LoadingSkeleton from '../../components/feedback/LoadingSkeleton';
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const { user } = useAuthStore();
   const { resumes, setResumes, removeResumeFromList } = useResumeStore();
   const [isLoading, setIsLoading] = useState(true);
+  const [view, setView] = useState('grid');
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -62,41 +63,80 @@ const Dashboard = () => {
     }
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   return (
-    <PageTransition className="flex-grow bg-background py-10 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+    <PageTransition className="flex-grow bg-background">
+      {/* Workspace Header */}
+      <div className="bg-surface border-b border-border-main py-10 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-            <p className="text-gray-500 mt-1">Welcome back, {user?.name || user?.fullName || 'User'}</p>
+            <h1 className="text-3xl font-bold text-text-main tracking-tight mb-2">
+              {getGreeting()}, {user?.name?.split(' ')[0] || user?.fullName?.split(' ')[0] || 'User'}
+            </h1>
+            <p className="text-text-muted">Continue building your professional profile.</p>
           </div>
           
           {(!isLoading && resumes.length > 0) && (
             <button
               onClick={handleCreateResume}
-              className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-md font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              className="flex items-center gap-2 bg-text-main text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-black transition-all shadow-subtle hover:shadow-elevated focus:outline-none"
             >
-              <Plus size={20} />
+              <Plus size={16} />
               New Resume
             </button>
           )}
         </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto py-10 px-6">
+        {(!isLoading && resumes.length > 0) && (
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-text-main">Recent Resumes</h2>
+            <div className="flex items-center gap-1 bg-surface border border-border-main rounded-md p-1">
+              <button 
+                onClick={() => setView('grid')}
+                className={`p-1.5 rounded transition-colors ${view === 'grid' ? 'bg-gray-100 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                aria-label="Grid view"
+              >
+                <LayoutGrid size={16} />
+              </button>
+              <button 
+                onClick={() => setView('list')}
+                className={`p-1.5 rounded transition-colors ${view === 'list' ? 'bg-gray-100 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                aria-label="List view"
+              >
+                <List size={16} />
+              </button>
+            </div>
+          </div>
+        )}
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <LoadingSkeleton key={i} className="h-56 rounded-xl" />
+              <LoadingSkeleton key={i} className="aspect-[1/1.2] rounded-xl" />
             ))}
           </div>
         ) : resumes.length === 0 ? (
           <EmptyState onCreate={handleCreateResume} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className={view === 'grid' 
+            ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" 
+            : "flex flex-col gap-4"
+          }>
             {resumes.map((resume, idx) => (
               <ResumeCard 
                 key={resume._id} 
                 resume={resume} 
                 index={idx}
+                view={view}
                 onDelete={handleDeleteResume}
               />
             ))}

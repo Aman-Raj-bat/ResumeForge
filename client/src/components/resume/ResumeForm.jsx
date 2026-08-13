@@ -9,28 +9,31 @@ import LanguagesSection from '../sections/LanguagesSection';
 
 const ResumeForm = ({ register, control, errors, getValues, setValue }) => {
   return (
-    <div className="p-6 h-full overflow-y-auto bg-gray-50">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="bg-surface p-6 rounded-lg border border-border-main shadow-sm">
-          <label className="block text-sm font-semibold text-gray-700 mb-1">Document Title (Internal)</label>
+    <div className="flex-1 overflow-y-auto editor-scroll">
+      <div className="p-5 md:p-8 space-y-8">
+        
+        <div className="bg-surface rounded-xl p-5 border border-border-main shadow-subtle group hover:border-gray-300 transition-colors">
+          <label className="block text-xs font-semibold text-text-muted mb-2 uppercase tracking-wider">Document Title</label>
           <input 
             type="text" 
-            className="w-full px-4 py-2 text-lg font-medium border border-border-main rounded-md focus:ring-1 focus:ring-primary focus:outline-none"
+            className="w-full text-lg font-bold text-text-main placeholder-gray-400 bg-transparent border-b border-transparent hover:border-gray-200 focus:border-primary focus:outline-none transition-colors pb-1"
             placeholder="e.g. Software Engineer Resume"
             {...register('title')} 
           />
         </div>
         
-        <PersonalInfoSection register={register} errors={errors} />
-        <SummarySection register={register} getValues={getValues} setValue={setValue} />
-        <ExperienceSection control={control} register={register} getValues={getValues} setValue={setValue} />
-        <EducationSection control={control} register={register} />
-        <ProjectsSection control={control} register={register} />
-        <SkillsSection control={control} register={register} getValues={getValues} setValue={setValue} />
-        <CertificationsSection control={control} register={register} />
-        <LanguagesSection control={control} register={register} />
+        <div className="space-y-6">
+          <PersonalInfoSection register={register} errors={errors} />
+          <SummarySection register={register} getValues={getValues} setValue={setValue} />
+          <ExperienceSection control={control} register={register} getValues={getValues} setValue={setValue} />
+          <EducationSection control={control} register={register} />
+          <ProjectsSection control={control} register={register} />
+          <SkillsSection control={control} register={register} getValues={getValues} setValue={setValue} />
+          <CertificationsSection control={control} register={register} />
+          <LanguagesSection control={control} register={register} />
+        </div>
         
-        <div className="h-20"></div> {/* Bottom padding for scrolling */}
+        <div className="h-24"></div> {/* Bottom padding */}
       </div>
     </div>
   );

@@ -36,34 +36,38 @@ const Register = () => {
   };
 
   return (
-    <PageTransition className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-surface rounded-xl shadow-sm border border-border-main p-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create an account</h2>
-          <p className="text-gray-500 text-sm">Join ResumeForge today</p>
+    <PageTransition className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="max-w-md w-full bg-surface rounded-xl shadow-subtle border border-border-main p-8 sm:p-10">
+        <div className="text-center mb-10">
+          <Link to="/" className="inline-flex text-xl font-bold tracking-tight text-text-main items-center gap-1 mb-6">
+            ResumeForge
+            <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1"></span>
+          </Link>
+          <h2 className="text-2xl font-bold text-text-main mb-2 tracking-tight">Create an account</h2>
+          <p className="text-text-muted text-sm">Join the professional workspace</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-text-main mb-1.5">Full Name</label>
             <input
               type="text"
               aria-invalid={errors.name ? "true" : "false"}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
+              className={`w-full px-4 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm ${
                 errors.name ? 'border-red-500' : 'border-border-main'
               }`}
               placeholder="John Doe"
               {...register('name', { required: 'Name is required' })}
             />
-            {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="mt-1.5 text-xs text-red-500">{errors.name.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <label className="block text-sm font-medium text-text-main mb-1.5">Email Address</label>
             <input
               type="email"
               aria-invalid={errors.email ? "true" : "false"}
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
+              className={`w-full px-4 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm ${
                 errors.email ? 'border-red-500' : 'border-border-main'
               }`}
               placeholder="you@example.com"
@@ -75,16 +79,16 @@ const Register = () => {
                 }
               })}
             />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
+            {errors.email && <p className="mt-1.5 text-xs text-red-500">{errors.email.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-medium text-text-main mb-1.5">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 aria-invalid={errors.password ? "true" : "false"}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
+                className={`w-full px-4 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm ${
                   errors.password ? 'border-red-500' : 'border-border-main'
                 }`}
                 placeholder="••••••••"
@@ -98,23 +102,23 @@ const Register = () => {
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-md"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-text-muted hover:text-text-main cursor-pointer focus:outline-none rounded-md transition-colors"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
-            {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
+            {errors.password && <p className="mt-1.5 text-xs text-red-500">{errors.password.message}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <label className="block text-sm font-medium text-text-main mb-1.5">Confirm Password</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 aria-invalid={errors.confirmPassword ? "true" : "false"}
-                className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary/50 transition-colors ${
+                className={`w-full px-4 py-2.5 bg-background border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm ${
                   errors.confirmPassword ? 'border-red-500' : 'border-border-main'
                 }`}
                 placeholder="••••••••"
@@ -124,21 +128,21 @@ const Register = () => {
                 })}
               />
             </div>
-            {errors.confirmPassword && <p className="mt-1 text-sm text-red-500">{errors.confirmPassword.message}</p>}
+            {errors.confirmPassword && <p className="mt-1.5 text-xs text-red-500">{errors.confirmPassword.message}</p>}
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center items-center bg-primary text-white py-2.5 px-4 rounded-md font-medium hover:opacity-90 transition-opacity disabled:opacity-70 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            className="w-full flex justify-center items-center bg-text-main text-white py-2.5 px-4 rounded-lg text-sm font-semibold hover:bg-black transition-all shadow-subtle hover:shadow-elevated disabled:opacity-70 disabled:cursor-not-allowed mt-4"
           >
-            {isLoading ? <Loader2 size={20} className="animate-spin" /> : 'Create Account'}
+            {isLoading ? <Loader2 size={18} className="animate-spin" /> : 'Create Account'}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm">
-          <span className="text-gray-500">Already have an account? </span>
-          <Link to="/login" className="text-primary font-medium hover:underline focus:outline-none focus:underline">
+        <div className="mt-8 text-center text-sm">
+          <span className="text-text-muted">Already have an account? </span>
+          <Link to="/login" className="text-text-main font-semibold hover:text-primary transition-colors focus:outline-none">
             Sign in
           </Link>
         </div>

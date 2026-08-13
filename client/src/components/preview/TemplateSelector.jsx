@@ -11,17 +11,17 @@ const TemplateSelector = () => {
   const { selectedTemplate, setSelectedTemplate } = useResumeStore();
 
   return (
-    <div className="flex items-center gap-3">
-      <LayoutTemplate size={18} className="text-gray-500" />
-      <div className="flex bg-gray-100 rounded-lg p-1">
+    <div className="flex items-center gap-2">
+      <LayoutTemplate size={16} className="text-text-muted hidden md:block" />
+      <div className="flex bg-surface border border-border-main rounded-md p-1 shadow-sm">
         {templates.map((template) => (
           <button
             key={template.id}
             onClick={() => setSelectedTemplate(template.id)}
-            className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            className={`px-3 py-1.5 text-xs font-semibold rounded transition-all ${
               selectedTemplate === template.id
-                ? 'bg-white text-primary shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-gray-100 text-text-main shadow-subtle'
+                : 'text-text-muted hover:text-text-main hover:bg-gray-50'
             }`}
           >
             {template.name}
