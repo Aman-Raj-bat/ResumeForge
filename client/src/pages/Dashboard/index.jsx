@@ -85,7 +85,7 @@ const Dashboard = () => {
           {(!isLoading && resumes.length > 0) && (
             <button
               onClick={handleCreateResume}
-              className="flex items-center gap-2 bg-text-main text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-black transition-all shadow-subtle hover:shadow-elevated focus:outline-none"
+              className="flex items-center gap-2 bg-white text-black px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-gray-200 transition-all shadow-subtle hover:shadow-elevated focus:outline-none"
             >
               <Plus size={16} />
               New Resume

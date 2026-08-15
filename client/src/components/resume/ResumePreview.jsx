@@ -43,7 +43,7 @@ const ResumePreview = React.memo(({ data, targetRef }) => {
       <div 
         className="w-[794px] min-h-[1123px] bg-white shadow-xl mx-auto origin-top transform transition-transform scale-75 sm:scale-90 md:scale-100 lg:scale-[0.85] xl:scale-100 mb-20"
       >
-        <div ref={targetRef} className="w-[794px] min-h-[1123px] bg-white">
+        <div ref={targetRef} className="w-[794px] min-h-[1123px] bg-white print-area">
           {renderTemplate()}
         </div>
       </div>
