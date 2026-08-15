@@ -6,6 +6,7 @@ const {
   generateBullets,
   suggestSkills,
   suggestAts,
+  rewriteContextual,
 } = require('../controllers/ai.controller');
 const { protect } = require('../middlewares/auth.middleware');
 
@@ -17,5 +18,6 @@ router.post('/experience', rewriteExperience);
 router.post('/bullets', generateBullets);
 router.post('/skills', suggestSkills);
 router.post('/ats', suggestAts);
+router.post('/rewrite', rewriteContextual);
 
 module.exports = router;

@@ -96,20 +96,47 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto py-10 px-6">
+        
+        {/* Statistics Section */}
+        {(!isLoading && resumes.length > 0) && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <div className="bg-surface border border-border-main rounded-xl p-5">
+              <p className="text-text-muted text-sm font-medium mb-1">Total Resumes</p>
+              <p className="text-3xl font-bold text-text-main">{resumes.length}</p>
+            </div>
+            <div className="bg-surface border border-border-main rounded-xl p-5">
+              <p className="text-text-muted text-sm font-medium mb-1">Completed</p>
+              <p className="text-3xl font-bold text-emerald-400">
+                {resumes.filter(r => r.experience?.length > 0 && r.education?.length > 0).length}
+              </p>
+            </div>
+            <div className="bg-surface border border-border-main rounded-xl p-5">
+              <p className="text-text-muted text-sm font-medium mb-1">In Progress</p>
+              <p className="text-3xl font-bold text-purple-400">
+                {resumes.filter(r => !r.experience?.length || !r.education?.length).length}
+              </p>
+            </div>
+            <div className="bg-surface border border-border-main rounded-xl p-5">
+              <p className="text-text-muted text-sm font-medium mb-1">AI Suggestions</p>
+              <p className="text-3xl font-bold text-text-main">Ready</p>
+            </div>
+          </div>
+        )}
+
         {(!isLoading && resumes.length > 0) && (
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-text-main">Recent Resumes</h2>
             <div className="flex items-center gap-1 bg-surface border border-border-main rounded-md p-1">
               <button 
                 onClick={() => setView('grid')}
-                className={`p-1.5 rounded transition-colors ${view === 'grid' ? 'bg-gray-100 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                className={`p-1.5 rounded transition-colors ${view === 'grid' ? 'bg-white/10 text-text-main' : 'text-text-muted hover:text-text-main'}`}
                 aria-label="Grid view"
               >
                 <LayoutGrid size={16} />
               </button>
               <button 
                 onClick={() => setView('list')}
-                className={`p-1.5 rounded transition-colors ${view === 'list' ? 'bg-gray-100 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                className={`p-1.5 rounded transition-colors ${view === 'list' ? 'bg-white/10 text-text-main' : 'text-text-muted hover:text-text-main'}`}
                 aria-label="List view"
               >
                 <List size={16} />

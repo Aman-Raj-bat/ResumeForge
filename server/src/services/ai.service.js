@@ -2,7 +2,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 let genAI = null;
 
-const getModel = () => {
+const getModel = (isJson = false) => {
   if (!process.env.GEMINI_API_KEY) {
     throw new Error('GEMINI_API_KEY is not configured');
   }
@@ -11,19 +11,28 @@ const getModel = () => {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   }
   
-  return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const config = { model: 'gemini-1.5-flash' };
+  if (isJson) {
+    config.generationConfig = { responseMimeType: "application/json" };
+  }
+  
+  return genAI.getGenerativeModel(config);
 };
 
-const generateContent = async (prompt) => {
+const generateContent = async (prompt, isJson = false) => {
   try {
     if (!prompt || prompt.trim() === '') {
       throw new Error('Prompt cannot be empty');
     }
 
-    const model = getModel();
+    const model = getModel(isJson);
     const result = await model.generateContent(prompt);
     const response = await result.response;
     let text = response.text();
+    
+    if (isJson) {
+      return JSON.parse(text);
+    }
     
     // Clean up typical markdown wrappers from AI if requested to just return text
     text = text.replace(/^```[\s\S]*?\n/, '').replace(/```$/, '').trim();

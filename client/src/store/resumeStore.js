@@ -5,11 +5,13 @@ export const useResumeStore = create((set) => ({
   activeResumeId: null,
   saveStatus: 'saved', // 'saved', 'saving', 'error'
   selectedTemplate: 'modern',
+  activeAiContext: null, // { field: 'summary', text: '...', label: 'Summary' }
 
   setResumes: (resumes) => set({ resumes }),
   setActiveResumeId: (id) => set({ activeResumeId: id }),
   setSaveStatus: (status) => set({ saveStatus: status }),
   setSelectedTemplate: (template) => set({ selectedTemplate: template }),
+  setActiveAiContext: (context) => set({ activeAiContext: context }),
   
   updateResumeInList: (updatedResume) => set((state) => ({
     resumes: state.resumes.map((r) => r._id === updatedResume._id ? updatedResume : r)

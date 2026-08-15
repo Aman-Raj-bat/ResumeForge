@@ -15,18 +15,18 @@
 @layer base {
   :root {
     /* Sophisticated indigo/violet accent */
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    --primary-50: #eef2ff;
+    --primary: #a855f7;
+    --primary-hover: #9333ea;
+    --primary-50: rgba(168, 85, 247, 0.1);
     
-    /* Warm/off-white neutral foundation */
-    --background: #fafafa;
-    --surface: #ffffff;
+    /* Dark premium foundation */
+    --background: #0B0C10;
+    --surface: #12131a;
     
-    /* Near-black typography & neutral grays */
-    --text-main: #171717;
-    --text-muted: #525252;
-    --border-main: #e5e5e5;
+    /* White typography & subtle borders */
+    --text-main: #ffffff;
+    --text-muted: #9ca3af;
+    --border-main: rgba(255, 255, 255, 0.1);
   }
 
   body {

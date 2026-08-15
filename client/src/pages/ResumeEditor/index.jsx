@@ -8,18 +8,19 @@ import ResumePreview from '../../components/resume/ResumePreview';
 import TemplateSelector from '../../components/preview/TemplateSelector';
 import PdfExportButton from '../../components/pdf/PdfExportButton';
 import { Loader2, ArrowLeft, AlertCircle, CheckCircle2, ChevronLeft } from 'lucide-react';
-import AiModal from '../../components/ai/AiModal';
+import ContextualAiPanel from '../../components/ai/ContextualAiPanel';
 
 const ResumeEditor = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { setActiveResumeId, saveStatus, setSaveStatus, updateResumeInList } = useResumeStore();
+  const { setActiveResumeId, saveStatus, setSaveStatus, updateResumeInList, activeAiContext, setActiveAiContext, selectedTemplate } = useResumeStore();
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false); // For mobile toggle
   
   const { register, control, watch, reset, getValues, setValue, formState: { errors } } = useForm({
     defaultValues: {
       title: 'Untitled Resume',
+      template: 'modern',
       personalInfo: {},
       summary: '',
       education: [],
@@ -38,9 +39,10 @@ const ResumeEditor = () => {
   const printRef = useRef(null);
 
   // Deep equality check
-  const hasChanges = (current, lastSaved) => {
+  const hasChanges = (current, lastSaved, template) => {
     if (!lastSaved) return true;
-    return JSON.stringify(current) !== JSON.stringify(lastSaved);
+    const currentData = { ...current, template };
+    return JSON.stringify(currentData) !== JSON.stringify(lastSaved);
   };
 
   useEffect(() => {
@@ -53,6 +55,7 @@ const ResumeEditor = () => {
           setActiveResumeId(fetchedResume._id);
           lastSavedData.current = fetchedResume;
           reset(fetchedResume);
+          useResumeStore.getState().setSelectedTemplate(fetchedResume.template || 'modern');
         }
       } catch (error) {
         console.error('Failed to fetch resume:', error);
@@ -74,14 +77,15 @@ const ResumeEditor = () => {
       return;
     }
 
-    if (!hasChanges(formData, lastSavedData.current)) return;
+    if (!hasChanges(formData, lastSavedData.current, selectedTemplate)) return;
 
     const saveChanges = async () => {
       try {
         setSaveStatus('saving');
-        const res = await api.put(`/resumes/${id}`, formData);
+        const dataToSave = { ...formData, template: selectedTemplate };
+        const res = await api.put(`/resumes/${id}`, dataToSave);
         setSaveStatus('saved');
-        lastSavedData.current = formData;
+        lastSavedData.current = dataToSave;
         
         if (res?.data?.success) {
           updateResumeInList(res.data.data);
@@ -98,7 +102,7 @@ const ResumeEditor = () => {
     return () => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
     };
-  }, [formData, id, isInitialLoading, setSaveStatus, updateResumeInList]);
+  }, [formData, selectedTemplate, id, isInitialLoading, setSaveStatus, updateResumeInList]);
 
   if (isInitialLoading) {
     return (
@@ -114,11 +118,17 @@ const ResumeEditor = () => {
       case 'saving':
         return <span className="flex items-center gap-1.5 text-text-muted text-xs font-medium"><Loader2 size={12} className="animate-spin" /> Saving...</span>;
       case 'saved':
-        return <span className="flex items-center gap-1.5 text-text-muted text-xs font-medium"><CheckCircle2 size={12} /> Saved</span>;
+        return <span className="flex items-center gap-1.5 text-emerald-500 text-xs font-medium"><CheckCircle2 size={12} /> Saved</span>;
       case 'error':
         return <span className="flex items-center gap-1.5 text-red-500 text-xs font-medium"><AlertCircle size={12} /> Error saving</span>;
       default:
         return null;
+    }
+  };
+
+  const handleApplyAiSuggestion = (suggestion) => {
+    if (activeAiContext?.field) {
+      setValue(activeAiContext.field, suggestion, { shouldDirty: true });
     }
   };
 
@@ -129,14 +139,14 @@ const ResumeEditor = () => {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => navigate('/dashboard')}
-            className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-gray-100 text-text-muted hover:text-text-main transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-white/10 text-text-muted hover:text-white transition-colors"
             title="Back to Dashboard"
           >
             <ChevronLeft size={20} />
           </button>
           <div className="w-px h-5 bg-border-main mx-1 hidden sm:block"></div>
           <div className="flex flex-col justify-center">
-            <h1 className="text-sm font-semibold text-text-main truncate max-w-[150px] sm:max-w-xs">
+            <h1 className="text-sm font-semibold text-white truncate max-w-[150px] sm:max-w-xs">
               {formData.title || 'Untitled Resume'}
             </h1>
           </div>
@@ -162,18 +172,26 @@ const ResumeEditor = () => {
       {/* Editor Workspace */}
       <div className="flex-grow flex overflow-hidden relative">
         {/* Left Panel: Form */}
-        <div className={`w-full md:w-[45%] lg:w-[40%] xl:w-[35%] h-full flex flex-col bg-surface border-r border-border-main z-0 transition-transform ${isPreviewOpen ? '-translate-x-full absolute md:relative md:translate-x-0' : 'translate-x-0'}`}>
+        <div className={`w-full md:w-[35%] lg:w-[35%] xl:w-[30%] h-full flex flex-col bg-surface border-r border-border-main z-0 transition-transform ${isPreviewOpen ? '-translate-x-full absolute md:relative md:translate-x-0' : 'translate-x-0'}`}>
           <ResumeForm register={register} control={control} errors={errors} getValues={getValues} setValue={setValue} />
         </div>
         
-        {/* Right Panel: Live Preview */}
-        <div className={`w-full md:w-[55%] lg:w-[60%] xl:w-[65%] h-full bg-[#eef2f6] flex flex-col transition-transform ${isPreviewOpen ? 'translate-x-0' : 'translate-x-full absolute md:relative md:translate-x-0'}`}>
+        {/* Center Panel: Live Preview */}
+        <div className={`w-full md:w-[40%] lg:w-[45%] xl:w-[50%] h-full bg-[#1e1e1e] flex flex-col transition-transform ${isPreviewOpen ? 'translate-x-0' : 'translate-x-full absolute md:relative md:translate-x-0'}`}>
           <ResumePreview data={formData} targetRef={printRef} />
         </div>
+
+        {/* Right Panel: AI Assistant */}
+        <div className="hidden md:flex md:w-[25%] lg:w-[20%] xl:w-[20%] h-full">
+          <ContextualAiPanel 
+            activeField={activeAiContext}
+            activeText={activeAiContext ? getValues(activeAiContext.field) : ''}
+            contextData={{ targetRole: formData.title, skills: formData.skills?.map(s => s.name).join(', ') }}
+            onApply={handleApplyAiSuggestion}
+            onClose={() => setActiveAiContext(null)}
+          />
+        </div>
       </div>
-      
-      {/* Global AI Modal (will be refactored to contextual panel later) */}
-      <AiModal />
     </div>
   );
 };

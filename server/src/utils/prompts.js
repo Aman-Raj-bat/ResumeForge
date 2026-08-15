@@ -83,10 +83,41 @@ const buildAtsPrompt = (resumeData) => {
   `;
 };
 
+const buildContextualRewritePrompt = (text, context, action) => {
+  return `
+    You are an expert resume writer and career coach. The user wants you to modify a specific piece of text from their resume.
+    
+    Action Requested: ${action}
+    (e.g., 'Make concise', 'Improve', 'Add impact', 'Make ATS-friendly', 'Fix grammar')
+    
+    Current Text:
+    "${text}"
+    
+    User Context (use to inform your rewrite if helpful):
+    Target Role: ${context.targetRole || 'Not specified'}
+    Skills: ${context.skills || 'Not specified'}
+    
+    Instructions:
+    1. Rewrite the "Current Text" according to the "Action Requested".
+    2. Provide a brief reason for why your suggestion is better.
+    3. Provide 2 alternative rewrites (different tone or focus).
+    4. You MUST format your response as a valid JSON object EXACTLY matching this schema:
+    {
+      "suggestion": "Your primary rewritten text",
+      "reason": "Brief explanation of improvements",
+      "alternatives": [
+        "Alternative option 1",
+        "Alternative option 2"
+      ]
+    }
+  `;
+};
+
 module.exports = {
   buildSummaryPrompt,
   buildExperienceRewritePrompt,
   buildBulletsPrompt,
   buildSkillsPrompt,
   buildAtsPrompt,
+  buildContextualRewritePrompt,
 };

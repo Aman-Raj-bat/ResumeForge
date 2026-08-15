@@ -23,8 +23,8 @@ const TemplateSelector = () => {
             onClick={() => setSelectedTemplate(template.id)}
             className={`px-3 py-1.5 text-xs font-semibold rounded transition-all ${
               selectedTemplate === template.id
-                ? 'bg-gray-100 text-text-main shadow-subtle'
-                : 'text-text-muted hover:text-text-main hover:bg-gray-50'
+                ? 'bg-white/10 text-white shadow-subtle'
+                : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
           >
             {template.name}

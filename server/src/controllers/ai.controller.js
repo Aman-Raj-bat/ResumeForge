@@ -5,7 +5,8 @@ const {
   buildExperienceRewritePrompt, 
   buildBulletsPrompt, 
   buildSkillsPrompt, 
-  buildAtsPrompt 
+  buildAtsPrompt,
+  buildContextualRewritePrompt
 } = require('../utils/prompts');
 
 const generateSummary = async (req, res, next) => {
@@ -80,10 +81,27 @@ const suggestAts = async (req, res, next) => {
   }
 };
 
+const rewriteContextual = async (req, res, next) => {
+  try {
+    const { text, context, action } = req.body;
+    if (!text || !action) {
+      return errorResponse(res, 400, 'Text and action are required');
+    }
+
+    const prompt = buildContextualRewritePrompt(text, context || {}, action);
+    const result = await aiService.generateContent(prompt, true); // true for JSON
+    
+    return successResponse(res, 200, 'Contextual rewrite generated', { result });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   generateSummary,
   rewriteExperience,
   generateBullets,
   suggestSkills,
   suggestAts,
+  rewriteContextual,
 };

@@ -13,6 +13,10 @@ const resumeSchema = new mongoose.Schema(
       default: 'Untitled Resume',
       trim: true,
     },
+    template: {
+      type: String,
+      default: 'modern',
+    },
     personalInfo: {
       fullName: { type: String, default: '' },
       email: { type: String, default: '' },
