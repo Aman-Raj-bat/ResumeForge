@@ -5,6 +5,9 @@ const templates = [
   { id: 'modern', name: 'Modern' },
   { id: 'minimal', name: 'Minimal' },
   { id: 'professional', name: 'Professional' },
+  { id: 'creative', name: 'Creative' },
+  { id: 'technical', name: 'Technical' },
+  { id: 'executive', name: 'Executive' },
 ];
 
 const TemplateSelector = () => {

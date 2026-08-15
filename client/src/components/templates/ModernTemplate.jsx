@@ -6,29 +6,29 @@ const ModernTemplate = ({ data }) => {
   return (
     <div className="bg-white font-sans text-gray-800 flex min-h-[1123px]">
       {/* Left Column (Accent) */}
-      <div className="w-[32%] bg-[#1e1b4b] text-white p-8 border-r-8 border-indigo-500 flex flex-col">
-        <div className="mb-12 text-center break-inside-avoid">
-          <div className="w-24 h-24 bg-white/10 rounded-full mx-auto mb-5 flex items-center justify-center text-4xl font-light text-white shadow-lg border border-white/20">
-            {data.personalInfo?.fullName?.charAt(0) || 'R'}
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight mb-2 uppercase">{data.personalInfo?.fullName || 'Your Name'}</h1>
-          <div className="w-8 h-1 bg-indigo-500 mx-auto rounded-full"></div>
+      <div className="w-[32%] bg-[#0B0C10] text-white p-10 flex flex-col">
+        {/* Name & Title */}
+        <div className="mb-12">
+          <h1 className="text-3xl font-bold tracking-tight leading-none mb-3">{data.personalInfo?.fullName || 'Priya Patel'}</h1>
         </div>
 
-        <div className="space-y-10 flex-grow">
-          <section className="break-inside-avoid">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-indigo-300 mb-4 flex items-center gap-2">
-              <span>Contact</span>
-              <div className="h-px bg-white/10 flex-grow"></div>
-            </h2>
-            <div className="text-[13px] space-y-3 text-white/90">
-              {data.personalInfo?.email && <div className="break-all">{data.personalInfo.email}</div>}
-              {data.personalInfo?.phone && <div>{data.personalInfo.phone}</div>}
-              {data.personalInfo?.location && <div>{data.personalInfo.location}</div>}
-              {data.personalInfo?.linkedIn && <div className="break-all">{data.personalInfo.linkedIn}</div>}
-              {data.personalInfo?.website && <div className="break-all">{data.personalInfo.website}</div>}
-            </div>
-          </section>
+        {/* Contact Info */}
+        <div className="mb-12">
+          <h2 className="text-[11px] font-bold tracking-[0.2em] uppercase text-gray-400 mb-5 border-b border-gray-800 pb-2">Contact</h2>
+          <div className="space-y-4 text-[13px] font-medium text-gray-300">
+            {data.personalInfo?.email && <div className="break-all">{data.personalInfo.email}</div>}
+            {!data.personalInfo?.email && <div className="break-all">priya.patel@example.in</div>}
+            
+            {data.personalInfo?.phone && <div>{data.personalInfo.phone}</div>}
+            {!data.personalInfo?.phone && <div>+91 98765 12345</div>}
+            
+            {data.personalInfo?.location && <div>{data.personalInfo.location}</div>}
+            {!data.personalInfo?.location && <div>Mumbai, Maharashtra</div>}
+            
+            {data.personalInfo?.linkedIn && <div className="break-all">{data.personalInfo.linkedIn}</div>}
+            {data.personalInfo?.website && <div className="break-all">{data.personalInfo.website}</div>}
+          </div>
+        </div>
 
           {data.skills && data.skills.length > 0 && (
             <section className="break-inside-avoid">
@@ -63,7 +63,6 @@ const ModernTemplate = ({ data }) => {
             </section>
           )}
         </div>
-      </div>
 
       {/* Right Column (Main Content) */}
       <div className="w-[68%] p-10 bg-white flex flex-col">

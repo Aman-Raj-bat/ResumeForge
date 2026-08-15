@@ -3,6 +3,9 @@ import { useResumeStore } from '../../store/resumeStore';
 import ModernTemplate from '../templates/ModernTemplate';
 import MinimalTemplate from '../templates/MinimalTemplate';
 import ProfessionalTemplate from '../templates/ProfessionalTemplate';
+import CreativeTemplate from '../templates/CreativeTemplate';
+import TechnicalTemplate from '../templates/TechnicalTemplate';
+import ExecutiveTemplate from '../templates/ExecutiveTemplate';
 import { FileText } from 'lucide-react';
 
 const ResumePreview = React.memo(({ data, targetRef }) => {
@@ -23,6 +26,12 @@ const ResumePreview = React.memo(({ data, targetRef }) => {
         return <MinimalTemplate data={data} />;
       case 'professional':
         return <ProfessionalTemplate data={data} />;
+      case 'creative':
+        return <CreativeTemplate data={data} />;
+      case 'technical':
+        return <TechnicalTemplate data={data} />;
+      case 'executive':
+        return <ExecutiveTemplate data={data} />;
       case 'modern':
       default:
         return <ModernTemplate data={data} />;

@@ -7,11 +7,17 @@ const MinimalTemplate = ({ data }) => {
     <div className="bg-white p-12 font-sans text-black break-inside-avoid">
       {/* Header */}
       <header className="mb-8">
-        <h1 className="text-4xl font-semibold tracking-tight mb-3 text-black uppercase">{data.personalInfo?.fullName || 'Your Name'}</h1>
+        <h1 className="text-4xl font-semibold tracking-tight mb-3 text-black uppercase">{data.personalInfo?.fullName || 'Aarav Sharma'}</h1>
         <div className="flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-gray-700 font-medium">
           {data.personalInfo?.email && <span>{data.personalInfo.email}</span>}
+          {!data.personalInfo?.email && <span>aarav.sharma@example.in</span>}
+          
           {data.personalInfo?.phone && <span>{data.personalInfo.phone}</span>}
+          {!data.personalInfo?.phone && <span>+91 98765 43210</span>}
+          
           {data.personalInfo?.location && <span>{data.personalInfo.location}</span>}
+          {!data.personalInfo?.location && <span>Bengaluru, Karnataka</span>}
+          
           {data.personalInfo?.linkedIn && <span>{data.personalInfo.linkedIn}</span>}
           {data.personalInfo?.website && <span>{data.personalInfo.website}</span>}
         </div>

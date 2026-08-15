@@ -6,16 +6,20 @@ const ProfessionalTemplate = ({ data }) => {
   return (
     <div className="bg-white p-12 font-serif text-black leading-snug min-h-[1123px]">
       {/* Header */}
-      <header className="mb-4 text-center break-inside-avoid">
-        <h1 className="text-2xl font-bold uppercase tracking-wider mb-1">{data.personalInfo?.fullName || 'Your Name'}</h1>
-        <div className="text-[12px] flex flex-wrap justify-center gap-x-2 gap-y-0.5 text-black">
-          {data.personalInfo?.location && <span>{data.personalInfo.location}</span>}
-          {data.personalInfo?.location && (data.personalInfo?.phone || data.personalInfo?.email) && <span>|</span>}
-          {data.personalInfo?.phone && <span>{data.personalInfo.phone}</span>}
-          {data.personalInfo?.phone && data.personalInfo?.email && <span>|</span>}
+      <header className="mb-6 text-center border-b-[2px] border-black pb-5">
+        <h1 className="text-3xl font-bold tracking-tight mb-2 uppercase">{data.personalInfo?.fullName || 'Vikram Singh'}</h1>
+        <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 text-[13px] text-gray-800">
           {data.personalInfo?.email && <span>{data.personalInfo.email}</span>}
-          {data.personalInfo?.linkedIn && <span>|</span>}
-          {data.personalInfo?.linkedIn && <span>{data.personalInfo.linkedIn}</span>}
+          {!data.personalInfo?.email && <span>vikram.singh@example.in</span>}
+          
+          {data.personalInfo?.phone && <><span className="text-gray-400">•</span><span>{data.personalInfo.phone}</span></>}
+          {!data.personalInfo?.phone && <><span className="text-gray-400">•</span><span>+91 98765 43210</span></>}
+          
+          {data.personalInfo?.location && <><span className="text-gray-400">•</span><span>{data.personalInfo.location}</span></>}
+          {!data.personalInfo?.location && <><span className="text-gray-400">•</span><span>New Delhi, India</span></>}
+          
+          {data.personalInfo?.linkedIn && <><span className="text-gray-400">•</span><span>{data.personalInfo.linkedIn}</span></>}
+          {data.personalInfo?.website && <><span className="text-gray-400">•</span><span>{data.personalInfo.website}</span></>}
         </div>
       </header>
 
