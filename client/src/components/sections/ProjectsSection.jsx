@@ -26,7 +26,7 @@ const ProjectsSection = ({ control, register }) => {
               <label className="block text-xs font-medium text-text-main mb-1.5">Project Name</label>
               <input 
                 type="text" 
-                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+                className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
                 {...register(`projects.${index}.name`)} 
               />
             </div>
@@ -34,7 +34,7 @@ const ProjectsSection = ({ control, register }) => {
               <label className="block text-xs font-medium text-text-main mb-1.5">URL (Optional)</label>
               <input 
                 type="text" 
-                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+                className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
                 {...register(`projects.${index}.url`)} 
               />
             </div>
@@ -43,7 +43,7 @@ const ProjectsSection = ({ control, register }) => {
               <input 
                 type="text" 
                 placeholder="React, Node.js, MongoDB"
-                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+                className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
                 {...register(`projects.${index}.technologies`)} 
               />
             </div>
@@ -62,7 +62,7 @@ const ProjectsSection = ({ control, register }) => {
       <button
         type="button"
         onClick={() => append({ name: '', description: '', url: '', technologies: '' })}
-        className="mt-4 flex items-center gap-1.5 text-text-muted text-xs font-medium hover:text-text-main transition-colors bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200 hover:border-gray-300"
+        className="mt-4 flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20"
       >
         <Plus size={16} /> Add Project
       </button>

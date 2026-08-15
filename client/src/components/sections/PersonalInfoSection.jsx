@@ -7,7 +7,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">Full Name</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.fullName')} 
           />
         </div>
@@ -15,7 +15,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">Email</label>
           <input 
             type="email" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.email')} 
           />
         </div>
@@ -23,7 +23,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">Phone</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.phone')} 
           />
         </div>
@@ -31,7 +31,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">Location</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.location')} 
           />
         </div>
@@ -39,7 +39,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">Website</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.website')} 
           />
         </div>
@@ -47,7 +47,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">LinkedIn</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.linkedIn')} 
           />
         </div>
@@ -55,7 +55,7 @@ const PersonalInfoSection = ({ register, errors }) => {
           <label className="block text-xs font-medium text-text-main mb-1.5">GitHub</label>
           <input 
             type="text" 
-            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-md focus:bg-white focus:ring-2 focus:ring-primary/20 focus:border-primary focus:outline-none transition-all text-sm"
+            className="w-full px-3 py-2 bg-[#1a1c23] border border-white/10 rounded-lg focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors text-white text-sm"
             {...register('personalInfo.github')} 
           />
         </div>

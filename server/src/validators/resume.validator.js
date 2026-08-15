@@ -8,7 +8,7 @@ const resumeSchemaValidator = (req, res, next) => {
     }),
     personalInfo: Joi.object({
       fullName: Joi.string().allow('', null),
-      email: Joi.string().email().allow('', null),
+      email: Joi.string().allow('', null),
       phone: Joi.string().allow('', null),
       location: Joi.string().allow('', null),
       website: Joi.string().allow('', null),
@@ -69,6 +69,7 @@ const resumeSchemaValidator = (req, res, next) => {
   const { error } = schema.validate(req.body, { abortEarly: false, allowUnknown: true });
   if (error) {
     const formattedErrors = error.details.map((detail) => detail.message);
+    console.error('Validation Error:', formattedErrors);
     return errorResponse(res, 400, 'Validation Error', formattedErrors);
   }
   next();

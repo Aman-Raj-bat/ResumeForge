@@ -59,7 +59,7 @@ const SkillsSection = ({ control, register, getValues, setValue }) => {
       <button
         type="button"
         onClick={() => append({ name: '' })}
-        className="mt-4 flex items-center gap-1.5 text-text-muted text-xs font-medium hover:text-text-main transition-colors bg-gray-50 px-3 py-1.5 rounded-md border border-gray-200 hover:border-gray-300"
+        className="mt-4 flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/20"
       >
         <Plus size={16} /> Add Skill
       </button>
