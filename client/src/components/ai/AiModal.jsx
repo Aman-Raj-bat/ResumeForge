@@ -43,40 +43,40 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
 
   return (
     <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 md:p-6 lg:p-8 animate-in fade-in duration-200">
-      <div className="bg-surface rounded-2xl shadow-elevated w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] border border-border-main ring-1 ring-black/5 animate-in zoom-in-95 duration-200">
+      <div className="bg-[#12131a] rounded-2xl shadow-elevated w-full max-w-2xl overflow-hidden flex flex-col max-h-[85vh] border border-white/10 ring-1 ring-black/5 animate-in zoom-in-95 duration-200">
         
         {/* Header */}
-        <div className="px-6 py-5 flex items-center justify-between shrink-0">
-          <h2 className="text-sm font-bold text-text-main flex items-center gap-2 tracking-tight uppercase">
-            <Sparkles size={16} className="text-primary" />
+        <div className="px-6 py-5 flex items-center justify-between shrink-0 border-b border-white/5">
+          <h2 className="text-sm font-bold text-white flex items-center gap-2 tracking-tight uppercase">
+            <Sparkles size={16} className="text-purple-400" />
             {title}
           </h2>
           <button 
             onClick={handleClose}
-            className="text-text-muted hover:text-text-main p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+            className="text-gray-400 hover:text-white p-1.5 rounded-md hover:bg-white/5 transition-colors"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto grow bg-gray-50/50">
+        <div className="p-6 overflow-y-auto grow bg-[#0B0C10]/50">
           {isLoading ? (
             <div className="py-8">
               <AiLoading />
             </div>
           ) : error ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-12 h-12 bg-red-50 border border-red-100 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
+              <div className="w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center justify-center mb-4 shadow-sm">
                 <AlertCircle size={24} className="text-red-500" />
               </div>
-              <h3 className="text-base font-bold text-text-main tracking-tight">Generation failed</h3>
-              <p className="text-sm text-text-muted mt-1.5 max-w-md">{error}</p>
+              <h3 className="text-base font-bold text-white tracking-tight">Generation failed</h3>
+              <p className="text-sm text-gray-400 mt-1.5 max-w-md">{error}</p>
             </div>
           ) : result ? (
             <div className="space-y-4">
-              <div className="p-5 bg-white rounded-xl border border-border-main shadow-subtle">
-                <p className="text-text-main whitespace-pre-wrap leading-relaxed text-sm">
+              <div className="p-5 bg-[#1a1c23] rounded-xl border border-white/10 shadow-subtle">
+                <p className="text-white whitespace-pre-wrap leading-relaxed text-sm">
                   {result}
                 </p>
               </div>
@@ -86,11 +86,11 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
 
         {/* Footer */}
         {!isLoading && (result || error) && (
-          <div className="px-6 py-5 flex items-center justify-between shrink-0 bg-surface border-t border-border-main">
+          <div className="px-6 py-5 flex items-center justify-between shrink-0 bg-[#12131a] border-t border-white/10">
             <div className="flex items-center gap-2">
               <button
                 onClick={handleGenerate}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-text-main bg-white border border-border-main rounded-md hover:bg-gray-50 transition-colors shadow-sm"
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-black bg-white rounded-md hover:bg-gray-200 transition-colors shadow-sm"
               >
                 <RefreshCw size={14} />
                 Regenerate
@@ -98,7 +98,7 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
               {result && (
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-text-main bg-white border border-border-main rounded-md hover:bg-gray-50 transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-white/10 border border-white/10 rounded-md hover:bg-white/20 transition-colors shadow-sm"
                 >
                   <Copy size={14} />
                   Copy
@@ -109,7 +109,7 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
             <div className="flex items-center gap-3">
               <button
                 onClick={handleClose}
-                className="px-4 py-2 text-xs font-semibold text-text-muted hover:text-text-main transition-colors"
+                className="px-4 py-2 text-xs font-semibold text-gray-400 hover:text-white transition-colors"
               >
                 Cancel
               </button>
@@ -119,7 +119,7 @@ const AiModal = ({ isOpen, onClose, onAccept, generateData, title = 'AI Assistan
                     onAccept(result);
                     handleClose();
                   }}
-                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-white bg-primary rounded-md hover:bg-primary/90 transition-all shadow-subtle hover:shadow-elevated"
+                  className="flex items-center gap-1.5 px-5 py-2 text-xs font-semibold text-white bg-purple-600 rounded-md hover:bg-purple-500 transition-all shadow-subtle hover:shadow-elevated"
                 >
                   <Check size={14} />
                   Apply Text

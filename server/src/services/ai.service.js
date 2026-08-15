@@ -11,7 +11,7 @@ const getModel = (isJson = false) => {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   }
   
-  const config = { model: 'gemini-1.5-flash' };
+  const config = { model: 'gemini-flash-latest' };
   if (isJson) {
     config.generationConfig = { responseMimeType: "application/json" };
   }
