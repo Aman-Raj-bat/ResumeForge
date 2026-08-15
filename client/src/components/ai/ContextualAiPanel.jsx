@@ -48,8 +48,8 @@ const ContextualAiPanel = ({ activeField, activeText, contextData, onApply, onCl
   }
 
   return (
-    <div className="h-full flex flex-col border-l border-border-main bg-[#0B0C10] w-[320px] shrink-0 overflow-y-auto editor-scroll">
-      <div className="p-4 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#0B0C10] z-10">
+    <div className="h-full flex-1 w-full flex flex-col border-l border-border-main bg-[#0B0C10] overflow-y-auto editor-scroll min-w-0">
+      <div className="p-4 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#0B0C10] z-10 shrink-0">
         <div className="flex items-center gap-2">
           <Sparkles size={16} className="text-purple-400" />
           <h3 className="font-semibold text-white text-sm">AI Assistant</h3>

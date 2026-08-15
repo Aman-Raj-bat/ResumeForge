@@ -13,10 +13,12 @@ export const generatePDF = async (element, filename = 'resume.pdf') => {
   };
 
   try {
-    await html2pdf().from(element).set(opt).save();
+    const generator = typeof html2pdf === 'function' ? html2pdf() : html2pdf.default();
+    await generator.from(element).set(opt).save();
     return true;
   } catch (error) {
     console.error('Failed to generate PDF:', error);
+    alert('PDF Generation Error: ' + (error.message || error.toString()));
     return false;
   }
 };

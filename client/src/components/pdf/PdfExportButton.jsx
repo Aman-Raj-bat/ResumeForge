@@ -1,22 +1,24 @@
 import { useState } from 'react';
-import { Download, Loader2 } from 'lucide-react';
-import { generatePDF } from '../../utils/pdf';
+import { Printer, Loader2 } from 'lucide-react';
+import { useReactToPrint } from 'react-to-print';
 
 const PdfExportButton = ({ targetRef, filename }) => {
   const [isExporting, setIsExporting] = useState(false);
 
-  const handleExport = async () => {
+  const handlePrint = useReactToPrint({
+    content: () => targetRef.current,
+    documentTitle: filename || 'resume',
+    onBeforePrint: () => setIsExporting(true),
+    onAfterPrint: () => setIsExporting(false),
+    onPrintError: () => setIsExporting(false),
+  });
+
+  const handleExport = () => {
     if (!targetRef.current || isExporting) return;
-    
     setIsExporting(true);
-    try {
-      await generatePDF(targetRef.current, `${filename.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`);
-    } catch (error) {
-      console.error('Export failed:', error);
-      alert('Failed to generate PDF. Please try again.');
-    } finally {
-      setIsExporting(false);
-    }
+    setTimeout(() => {
+      handlePrint();
+    }, 150);
   };
 
   return (
@@ -28,12 +30,12 @@ const PdfExportButton = ({ targetRef, filename }) => {
       {isExporting ? (
         <>
           <Loader2 size={14} className="animate-spin" />
-          Exporting...
+          Preparing...
         </>
       ) : (
         <>
-          <Download size={14} />
-          Export PDF
+          <Printer size={14} />
+          Print / PDF
         </>
       )}
     </button>

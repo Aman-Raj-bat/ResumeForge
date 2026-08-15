@@ -41,10 +41,11 @@ const ResumePreview = React.memo(({ data, targetRef }) => {
   return (
     <div className="flex-1 overflow-y-auto editor-scroll flex justify-center p-8 bg-[#eef2f6]">
       <div 
-        ref={targetRef} 
         className="w-[794px] min-h-[1123px] bg-white shadow-xl mx-auto origin-top transform transition-transform scale-75 sm:scale-90 md:scale-100 lg:scale-[0.85] xl:scale-100 mb-20"
       >
-        {renderTemplate()}
+        <div ref={targetRef} className="w-[794px] min-h-[1123px] bg-white">
+          {renderTemplate()}
+        </div>
       </div>
     </div>
   );
