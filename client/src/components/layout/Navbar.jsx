@@ -1,12 +1,15 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { useToast } from '../ui/Toast';
 import { LogOut, ChevronRight } from 'lucide-react';
 
 const Navbar = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user, logout } = useAuthStore();
   const { toast } = useToast();
+
+  if (location.pathname === '/') return null;
 
   const handleLogout = () => {
     logout();
