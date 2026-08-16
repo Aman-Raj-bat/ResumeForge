@@ -5,7 +5,8 @@ const Footer = () => {
     <footer className="border-t border-border-main bg-surface py-12 mt-auto">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-2">
-          <Link to="/" className="text-2xl font-bold text-primary mb-4 block">
+          <Link to="/" className="text-2xl font-bold text-text-main mb-4 flex items-center gap-2">
+            <img src="/logo-icon.jpg" alt="" className="h-8 w-8 rounded-md object-cover" />
             ResumeForge
           </Link>
           <p className="text-sm text-gray-500 max-w-sm">

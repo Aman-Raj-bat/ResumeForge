@@ -20,9 +20,9 @@ const Navbar = () => {
   return (
     <nav className="border-b border-border-main/50 bg-background/80 backdrop-blur-md px-6 py-4 flex items-center justify-between sticky top-0 z-50 transition-all">
       <div className="flex items-center gap-10">
-        <Link to="/" className="text-xl font-bold tracking-tight text-text-main flex items-center gap-1">
+        <Link to="/" className="text-xl font-bold tracking-tight text-text-main flex items-center gap-2">
+          <img src="/logo-icon.jpg" alt="" className="h-8 w-8 rounded-md object-cover" />
           ResumeForge
-          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1"></span>
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-text-muted">
           {!isAuthenticated ? (
